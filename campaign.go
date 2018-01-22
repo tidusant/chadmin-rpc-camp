@@ -83,7 +83,10 @@ func LoadAll(usex models.UserSession) string {
 func LoadAllActive(usex models.UserSession) string {
 
 	//default status
-	camps := rpch.GetCampaignsByRange(usex.Shop.ID.Hex(), time.Now().UTC(), time.Now().UTC())
+	t := time.Now()
+	d, _ := time.ParseDuration(strconv.Itoa(t.Hour()-23) + "h" + strconv.Itoa(t.Minute()-59) + "m")
+
+	camps := rpch.GetCampaignsByRange(usex.Shop.ID.Hex(), t.UTC().Add(d), t.UTC().Add(-d))
 	allcamps := rpch.GetAllCampaigns(usex.Shop.ID.Hex())
 	info, _ := json.Marshal(camps)
 	info2, _ := json.Marshal(allcamps)
