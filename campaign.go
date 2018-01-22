@@ -86,7 +86,7 @@ func LoadAllActive(usex models.UserSession) string {
 	t := time.Now()
 	d, _ := time.ParseDuration(strconv.Itoa(t.Hour()-23) + "h" + strconv.Itoa(t.Minute()-59) + "m")
 
-	camps := rpch.GetCampaignsByRange(usex.Shop.ID.Hex(), t.UTC().Add(d), t.UTC().Add(-d).AddDate(0, 0, 1))
+	camps := rpch.GetCampaignsByRange(usex.Shop.ID.Hex(), t.UTC().Add(d).AddDate(0, 0, -1), t.UTC().Add(d).AddDate(0, 0, 1))
 	allcamps := rpch.GetAllCampaigns(usex.Shop.ID.Hex())
 	info, _ := json.Marshal(camps)
 	info2, _ := json.Marshal(allcamps)
