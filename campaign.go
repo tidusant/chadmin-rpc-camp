@@ -75,7 +75,6 @@ func LoadAll(usex models.UserSession) string {
 	for k, v := range camps {
 		camps[k] = rpch.GetCampaignDetailByID(usex.Shop.ID.Hex(), v)
 	}
-
 	info, _ := json.Marshal(camps)
 	strrt := string(info)
 	return c3mcommon.ReturnJsonMessage("1", "", "success", strrt)
