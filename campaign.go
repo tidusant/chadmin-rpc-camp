@@ -80,17 +80,19 @@ func LoadAll(usex models.UserSession) string {
 	return c3mcommon.ReturnJsonMessage("1", "", "success", strrt)
 }
 func LoadAllActive(usex models.UserSession) string {
-
 	//default status
 	t := time.Now()
 	d, _ := time.ParseDuration(strconv.Itoa(t.Hour()-23) + "h" + strconv.Itoa(t.Minute()-59) + "m")
-
 	camps := rpch.GetCampaignsByRange(usex.Shop.ID.Hex(), t.UTC().Add(d).AddDate(0, 0, -1), t.UTC().Add(d).AddDate(0, 0, 1))
-	allcamps := rpch.GetAllCampaigns(usex.Shop.ID.Hex())
-	info, _ := json.Marshal(camps)
-	info2, _ := json.Marshal(allcamps)
-	strrt := `{"active":` + string(info) + `,"all":` + string(info2) + `}`
+	strrt := `[`
 
+	for _, v := range camps {
+		strrt += `{"ID":"` + v.ID.Hex() + `","Name":"` + v.Name + `"},`
+	}
+	if len(camps) > 0 {
+		strrt = strrt[:len(strrt)-1]
+	}
+	strrt += `]`
 	return c3mcommon.ReturnJsonMessage("1", "", "success", strrt)
 }
 func LoadDetail(usex models.UserSession) string {
